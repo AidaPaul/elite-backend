@@ -17,9 +17,10 @@ Coming somewhere tomorrow or around the weekend. Will update this section once i
 1. Checkout the repo from git
 2. Install python dependencies by running `pip install -r requirements.txt`. 
 3. Copy settings.py.template as settings.py and make sure to input your SQL details in approperiate place.
-4. Run database sync with command `python manage.py syncdb`
+4. Run database migration with command `python manage.py migrate`
 5. Populate the database with command `python manage.py refreshdata`. This WILL take a while, how long
 exactly depends primarily on performance of your SQL server (this is very insert-heavy operation).
+6. Optionally you can also run tests, to do so use command `python manage.py test`
     
 # Running and usage
 
