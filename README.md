@@ -1,9 +1,16 @@
 # elite-backend
-A project to provide open source way to play with Elite: Dangerous market data.
-And also some rest interface so this data can be easily used by 3rd party apps.
+A project to provide open source way to play with Elite: Dangerous market data, ships and mod locations
+and ideally create a meta-platform that will be easy to use and re-use for all developers, so they can
+just focus on writing the app of their dreams, and not waste time on redoing what already was done.
+If time allows I also want to write a simple website to do provide users with simple web interface to common functions
+like finding commodity, traderoute, ships etc.
+
+This of course is far road away, but certainly reachable within a reasonable timeframe. In the end, it's just data
+and representing it in REST way that is easy to extend and deploy + writing integration with existing sources.
 
 # Live demo
-Coming somewhere tomorrow or around the weekend. Will update this section once it is up ;).
+Live version of master branch of this code can be found at http://elite.x20x.co.uk/. Anonymous users have read access
+and so far write access is restricted to registered users.
 
 # Set-up steps
 
