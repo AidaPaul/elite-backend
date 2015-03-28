@@ -3,10 +3,8 @@ Script that fetches data from remote json files into database
 """
 import datetime
 import logging
-
 from django.core.management.base import BaseCommand, CommandError
 import requests
-
 from api.models import Category, Commodity, Economy, Listing, Station, System, Faction, Government, Allegiance, \
     State, Security, StationType
 
