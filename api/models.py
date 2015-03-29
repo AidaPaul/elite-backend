@@ -87,3 +87,47 @@ class Listing(models.Model):
     collected_at = models.DateTimeField()
     update_count = models.IntegerField()
 
+
+class FactionRank(models.Model):
+    name = models.CharField(max_length=25)
+    faction = models.ForeignKey(Faction)
+
+
+class ModuleType(models.Model):
+    name = models.CharField(max_length=50)
+
+
+class ModuleParameterType(models.Model):
+    name = models.CharField(max_length=50)
+
+
+class ModuleParameter(models.Model):
+    type = models.ForeignKey(ModuleParameterType)
+    value = models.CharField(max_length=75)
+
+
+class Module(models.Model):
+    name = models.CharField(max_length=50)
+    type = models.ForeignKey(ModuleType)
+    parameters = models.ManyToManyField(ModuleParameter)
+
+
+class ShipParameterType(models.Model):
+    name = models.CharField(max_length=50)
+
+
+class ShipParameter(models.Model):
+    type = models.ForeignKey(ShipParameterType)
+    value = models.CharField(max_length=75)
+
+
+class ShipType(models.Model):
+    type = models.CharField(max_length=25)
+
+
+class Ship(models.Model):
+    name = models.CharField(max_length=25)
+    type = models.ForeignKey(ShipType)
+    required_rank = models.ForeignKey(FactionRank)
+    parameters = models.ManyToManyField(ShipParameter)
+    modules = models.ManyToManyField(Module)
