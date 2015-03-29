@@ -10,29 +10,50 @@ class Commodity(models.Model):
     name = models.CharField(max_length=50)
     average_price = models.IntegerField(null=True, blank=True)
 
+    def __str__(self):
+        return self.name
+
 
 class Economy(models.Model):
     name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name
 
 
 class Faction(models.Model):
     name = models.CharField(max_length=50, null=True)
 
+    def __str__(self):
+        return self.name
+
 
 class Government(models.Model):
     name = models.CharField(max_length=50, null=True)
+
+    def __str__(self):
+        return self.name
 
 
 class Allegiance(models.Model):
     name = models.CharField(max_length=50, null=True)
 
+    def __str__(self):
+        return self.name
+
 
 class State(models.Model):
     name = models.CharField(max_length=50, null=True)
 
+    def __str__(self):
+        return self.name
+
 
 class Security(models.Model):
     name = models.CharField(max_length=50, null=True)
+
+    def __str__(self):
+        return self.name
 
 
 class System(models.Model):
@@ -50,9 +71,15 @@ class System(models.Model):
     needs_permit = models.BooleanField(default=False)
     updated_at = models.DateTimeField()
 
+    def __str__(self):
+        return self.name
+
 
 class StationType(models.Model):
     name = models.CharField(max_length=50, null=True)
+
+    def __str__(self):
+        return self.name
 
 
 class Station(models.Model):
@@ -76,6 +103,9 @@ class Station(models.Model):
     prohibited_commodities = models.ManyToManyField(Commodity)
     updated_at = models.DateTimeField(auto_now_add=True, blank=True)
 
+    def __str__(self):
+        return self.name
+
 
 class Listing(models.Model):
     station = models.ForeignKey(Station)
@@ -92,18 +122,30 @@ class AllegianceRank(models.Model):
     name = models.CharField(max_length=25)
     allegiance = models.ForeignKey(Allegiance)
 
+    def __str__(self):
+        return self.name
+
 
 class ModuleType(models.Model):
     name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name
 
 
 class ModuleParameterType(models.Model):
     name = models.CharField(max_length=50)
 
+    def __str__(self):
+        return self.name
+
 
 class ModuleParameter(models.Model):
     type = models.ForeignKey(ModuleParameterType)
     value = models.CharField(max_length=75)
+
+    def __str__(self):
+        return self.value
 
 
 class Module(models.Model):
@@ -111,23 +153,44 @@ class Module(models.Model):
     type = models.ForeignKey(ModuleType)
     parameters = models.ManyToManyField(ModuleParameter)
 
+    def __str__(self):
+        return self.name
+
+
+class ShipSlot(models.Model):
+    size = models.ForeignKey(ModuleParameter, null=True)
+    module = models.ForeignKey(Module, null=True)
+    type = models.ForeignKey(ModuleType)
+
 
 class ShipParameterType(models.Model):
     name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name
 
 
 class ShipParameter(models.Model):
     type = models.ForeignKey(ShipParameterType)
     value = models.CharField(max_length=75)
 
+    def __str__(self):
+        return self.value
+
 
 class ShipType(models.Model):
     type = models.CharField(max_length=25)
+
+    def __str__(self):
+        return self.type
 
 
 class Ship(models.Model):
     name = models.CharField(max_length=25)
     type = models.ForeignKey(ShipType)
-    required_rank = models.ForeignKey(AllegianceRank)
+    required_rank = models.ForeignKey(AllegianceRank, null=True)
     parameters = models.ManyToManyField(ShipParameter)
-    modules = models.ManyToManyField(Module)
+    slots = models.ManyToManyField(ShipSlot)
+
+    def __str__(self):
+        return self.name
