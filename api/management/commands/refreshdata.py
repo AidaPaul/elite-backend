@@ -48,15 +48,15 @@ class Command(BaseCommand):
         logger.debug('Processing systems')
         for system in systems:
             if system['primary_economy'] is not None:
-                system['primary_economy'] = self._get_economy(system['primary_economy'])
+                system['primary_economy'] = Economy.objects.get_or_create(name=system['primary_economy'])[0]
             if system['needs_permit'] is None:
                 system['needs_permit'] = False
-            system['faction'] = self._get_faction(system['faction'])
-            system['allegiance'] = self._get_allegiance(system['allegiance'])
+            system['faction'] = Faction.objects.get_or_create(name=system['faction'])[0]
+            system['allegiance'] = Allegiance.objects.get_or_create(name=system['allegiance'])[0]
             system['updated_at'] = datetime.datetime.fromtimestamp(system['updated_at'])
-            system['government'] = self._get_government(system['government'])
-            system['state'] = self._get_state(system['state'])
-            system['security'] = self._get_security(system['security'])
+            system['government'] = Government.objects.get_or_create(name=system['government'])[0]
+            system['state'] = State.objects.get_or_create(name=system['state'])[0]
+            system['security'] = Security.objects.get_or_create(name=system['security'])[0]
             new_system = System(**system)
             new_system.save()
         logger.debug('Finished processing systems')
@@ -95,18 +95,18 @@ class Command(BaseCommand):
                 station['has_outfitting'] = False
             if station['has_shipyard'] is None:
                 station['has_shipyard'] = False
-            station['faction'] = self._get_faction(station['faction'])
-            station['allegiance'] = self._get_allegiance(station['allegiance'])
-            station['state'] = self._get_state(station['state'])
+            station['faction'] = Faction.objects.get_or_create(name=station['faction'])[0]
+            station['allegiance'] = Allegiance.objects.get_or_create(name=station['allegiance'])[0]
+            station['state'] = State.objects.get_or_create(name=station['state'])[0]
             station['updated_at'] = datetime.datetime.fromtimestamp(station['updated_at'])
-            station['type'] = self._get_station_type(station['type'])
-            station['government'] = self._get_government(station['government'])
+            station['type'] = StationType.objects.get_or_create(name=station['type'])[0]
+            station['government'] = Government.objects.get_or_create(name=station['government'])[0]
             new_station = Station(**station)
             new_station.save()
 
             if economies:
                 for economy in economies:
-                    new_station.economies.add(self._get_economy(economy))
+                    new_station.economies.add(Economy.objects.get_or_create(name=economy)[0])
             if prohibited_commodities:
                 for commodity in prohibited_commodities:
                     new_station.prohibited_commodities.add(self._get_commodity(commodity))
@@ -150,83 +150,6 @@ class Command(BaseCommand):
         if data.status_code != 200:
             raise CommandError
         return data.json()
-
-    @staticmethod
-    def _get_faction(faction) -> Faction:
-        """
-        Attempts to fetch existing faction, or create a new one if not found.
-
-        @rtype : Faction
-        @param faction: Faction that we are looking for
-        @return: Faction
-        """
-        return Faction.objects.get_or_create(name=faction)[0]
-
-    @staticmethod
-    def _get_economy(economy) -> Economy:
-        """
-        Attempts to fetch existing economy, or create a new one if not found.
-
-        @rtype : Economy
-        @param economy: Economy that we are looking for
-        @return: Economy
-        """
-        return Economy.objects.get_or_create(name=economy)[0]
-
-    @staticmethod
-    def _get_allegiance(allegiance) -> Allegiance:
-        """
-        Attempts to fetch existing allegiance, or create a new one if not found.
-
-        @rtype : Allegiance
-        @param allegiance: Allegiance that we are looking for
-        @return: Allegiance
-        """
-        return Allegiance.objects.get_or_create(name=allegiance)[0]
-
-    @staticmethod
-    def _get_government(government) -> Government:
-        """
-        Attempts to fetch existing government, or create a new one if not found.
-
-        @rtype : Government
-        @param government: Government that we are looking for
-        @return: Government
-        """
-        return Government.objects.get_or_create(name=government)[0]
-
-    @staticmethod
-    def _get_state(state) -> State:
-        """
-        Attempts to fetch existing state, or create a new one if not found.
-
-        @rtype : State
-        @param state: State that we are looking for
-        @return: State
-        """
-        return State.objects.get_or_create(name=state)[0]
-
-    @staticmethod
-    def _get_security(security) -> Security:
-        """
-        Attempts to fetch existing security, or create a new one if not found.
-
-        @rtype : Security
-        @param security: Security that we are looking for
-        @return: Security
-        """
-        return Security.objects.get_or_create(name=security)[0]
-
-    @staticmethod
-    def _get_station_type(stationtype) -> StationType:
-        """
-        Attempts to fetch existing stationtype, or create a new one if not found.
-
-        @rtype : StationType
-        @param stationtype: StationType that we are looking for
-        @return: StationType
-        """
-        return StationType.objects.get_or_create(name=stationtype)[0]
 
     @staticmethod
     def _get_commodity(commodity) -> Commodity:
