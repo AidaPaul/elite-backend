@@ -160,16 +160,7 @@ class Command(BaseCommand):
         @param faction: Faction that we are looking for
         @return: Faction
         """
-        if faction is None or len(faction) == 0:
-            faction = 'No faction'
-        system_faction = Faction.objects.filter(name=faction)
-        if len(system_faction) == 1:
-            faction = system_faction[0]
-        else:
-            new_faction = Faction(name=faction)
-            new_faction.save()
-            faction = new_faction
-        return faction
+        return Faction.objects.get_or_create(name=faction)[0]
 
     @staticmethod
     def _get_economy(economy) -> Economy:
@@ -180,14 +171,7 @@ class Command(BaseCommand):
         @param economy: Economy that we are looking for
         @return: Economy
         """
-        entity_economy = Economy.objects.filter(name=economy)
-        if len(entity_economy) == 1:
-            economy = entity_economy[0]
-        else:
-            new_economy = Economy(name=economy)
-            new_economy.save()
-            economy = new_economy
-        return economy
+        return Economy.objects.get_or_create(name=economy)[0]
 
     @staticmethod
     def _get_allegiance(allegiance) -> Allegiance:
@@ -198,14 +182,7 @@ class Command(BaseCommand):
         @param allegiance: Allegiance that we are looking for
         @return: Allegiance
         """
-        entity_allegiance = Allegiance.objects.filter(name=allegiance)
-        if len(entity_allegiance) == 1:
-            allegiance = entity_allegiance[0]
-        else:
-            new_allegiance = Allegiance(name=allegiance)
-            new_allegiance.save()
-            allegiance = new_allegiance
-        return allegiance
+        return Allegiance.objects.get_or_create(name=allegiance)[0]
 
     @staticmethod
     def _get_government(government) -> Government:
@@ -216,14 +193,7 @@ class Command(BaseCommand):
         @param government: Government that we are looking for
         @return: Government
         """
-        entity_government = Government.objects.filter(name=government)
-        if len(entity_government) == 1:
-            government = entity_government[0]
-        else:
-            new_government = Government(name=government)
-            new_government.save()
-            government = new_government
-        return government
+        return Government.objects.get_or_create(name=government)[0]
 
     @staticmethod
     def _get_state(state) -> State:
@@ -234,14 +204,7 @@ class Command(BaseCommand):
         @param state: State that we are looking for
         @return: State
         """
-        entity_state = State.objects.filter(name=state)
-        if len(entity_state) == 1:
-            state = entity_state[0]
-        else:
-            new_state = State(name=state)
-            new_state.save()
-            state = new_state
-        return state
+        return State.objects.get_or_create(name=state)[0]
 
     @staticmethod
     def _get_security(security) -> Security:
@@ -252,14 +215,7 @@ class Command(BaseCommand):
         @param security: Security that we are looking for
         @return: Security
         """
-        entity_security = Security.objects.filter(name=security)
-        if len(entity_security) == 1:
-            security = entity_security[0]
-        else:
-            new_security = Security(name=security)
-            new_security.save()
-            security = new_security
-        return security
+        return Security.objects.get_or_create(name=security)[0]
 
     @staticmethod
     def _get_station_type(stationtype) -> StationType:
@@ -270,14 +226,7 @@ class Command(BaseCommand):
         @param stationtype: StationType that we are looking for
         @return: StationType
         """
-        entity_stationtype = StationType.objects.filter(name=stationtype)
-        if len(entity_stationtype) == 1:
-            stationtype = entity_stationtype[0]
-        else:
-            new_stationtype = StationType(name=stationtype)
-            new_stationtype.save()
-            stationtype = new_stationtype
-        return stationtype
+        return StationType.objects.get_or_create(name=stationtype)[0]
 
     @staticmethod
     def _get_commodity(commodity) -> Commodity:
