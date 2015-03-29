@@ -88,9 +88,9 @@ class Listing(models.Model):
     update_count = models.IntegerField()
 
 
-class FactionRank(models.Model):
+class AllegianceRank(models.Model):
     name = models.CharField(max_length=25)
-    faction = models.ForeignKey(Faction)
+    allegiance = models.ForeignKey(Allegiance)
 
 
 class ModuleType(models.Model):
@@ -128,6 +128,6 @@ class ShipType(models.Model):
 class Ship(models.Model):
     name = models.CharField(max_length=25)
     type = models.ForeignKey(ShipType)
-    required_rank = models.ForeignKey(FactionRank)
+    required_rank = models.ForeignKey(AllegianceRank)
     parameters = models.ManyToManyField(ShipParameter)
     modules = models.ManyToManyField(Module)
