@@ -34,6 +34,17 @@ exactly depends primarily on performance of your SQL server (this is very insert
 Once everything is set up and shining, then all left to do is to type `python manage.py runserver` and it's alive!
 When you steer to the bound ip and port, you will find that at /api there is a neat web-interface that allows
 for easy browsing of the API structure and data. You can also manipulate it from django admin (/admin).
+A word of note - before we will reach 0.1 release master branch is a glorified "development" branch. If you are pulling
+before 0.1 is done, you may have to wipe database entirely between commits.
     
 # Issues? Grievances? Complains? Feature requests? Ideas? 
 Please leave them at github or contact me by email.
+
+# Credits
+I always give credit where it's due, so it's worth couple projects.
+* [Frontier Development] (http://frontier.co.uk/) - for making Elite: Dangerous
+* [Elide dangerous wiki] (http://elite-dangerous.wikia.com/wiki/Elite_Dangerous_Wiki) - for collecting this mountain
+of data
+* [E:D Shipyard] (http://www.edshipyard.com/) - for collecting all the module stats, even the hidden ones!
+* [eddb] (http://eddb.io/) - for the easy-to-access export of their data which we so happily use :)
+* [Leffe] (http://www.leffe.com/en) - do I have to say more?
