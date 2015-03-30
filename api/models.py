@@ -140,7 +140,7 @@ class AllegianceRank(models.Model):
     allegiance = models.ForeignKey(Allegiance)
 
     def __str__(self):
-        return self.name
+        return "%s %s" % (self.allegiance, self.name)
 
 
 class ModuleType(models.Model):
