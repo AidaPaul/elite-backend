@@ -178,7 +178,7 @@ class ShipParameter(models.Model):
     value = models.CharField(max_length=75)
 
     def __str__(self):
-        return "%s: %s" % (self.type, self.name)
+        return "%s: %s" % (self.type, self.value)
 
 
 class ShipType(models.Model):
