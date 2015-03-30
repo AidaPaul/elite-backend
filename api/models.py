@@ -25,6 +25,8 @@ class Faction(models.Model):
     name = models.CharField(max_length=50, null=True)
 
     def __str__(self):
+        if self.name is None:
+            return 'Unspecified faction'
         return self.name
 
 
@@ -32,6 +34,8 @@ class Government(models.Model):
     name = models.CharField(max_length=50, null=True)
 
     def __str__(self):
+        if self.name is None:
+            return 'Unspecified government'
         return self.name
 
 
@@ -39,13 +43,16 @@ class Allegiance(models.Model):
     name = models.CharField(max_length=50, null=True)
 
     def __str__(self):
+        if self.name is None:
+            return 'Unspecified allegiance'
         return self.name
-
 
 class State(models.Model):
     name = models.CharField(max_length=50, null=True)
 
     def __str__(self):
+        if self.name is None:
+            return 'Unspecified state'
         return self.name
 
 
@@ -53,6 +60,8 @@ class Security(models.Model):
     name = models.CharField(max_length=50, null=True)
 
     def __str__(self):
+        if self.name is None:
+            return 'Unspecified security'
         return self.name
 
 
@@ -79,6 +88,8 @@ class StationType(models.Model):
     name = models.CharField(max_length=50, null=True)
 
     def __str__(self):
+        if self.name is None:
+            return 'Unspecified station'
         return self.name
 
 
@@ -178,7 +189,7 @@ class ShipParameter(models.Model):
     value = models.CharField(max_length=75)
 
     def __str__(self):
-        return "%s: %s" % (self.type, self.name)
+        return "%s: %s" % (self.type, self.value)
 
 
 class ShipType(models.Model):
