@@ -41,7 +41,7 @@ before 0.1 is done, you may have to wipe database entirely between commits.
 Please leave them at github or contact me by email.
 
 # Credits
-I always give credit where it's due, so it's worth couple projects.
+I always give credit where it's due, so it's worth to mention couple projects.
 * [Frontier Development] (http://frontier.co.uk/) - for making Elite: Dangerous
 * [Elide dangerous wiki] (http://elite-dangerous.wikia.com/wiki/Elite_Dangerous_Wiki) - for collecting this mountain
 of data
