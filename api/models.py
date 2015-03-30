@@ -145,7 +145,7 @@ class ModuleParameter(models.Model):
     value = models.CharField(max_length=75)
 
     def __str__(self):
-        return self.value
+        return "%s: %s" % (self.type, self.value)
 
 
 class Module(models.Model):
@@ -154,13 +154,16 @@ class Module(models.Model):
     parameters = models.ManyToManyField(ModuleParameter)
 
     def __str__(self):
-        return self.name
+        return "%s: %s" % (self.type, self.name)
 
 
 class ShipSlot(models.Model):
     size = models.ForeignKey(ModuleParameter, null=True)
     module = models.ForeignKey(Module, null=True)
     type = models.ForeignKey(ModuleType)
+
+    def __str__(self):
+            return "%s: %s (%s)" % (self.type, self.size, self.module)
 
 
 class ShipParameterType(models.Model):
@@ -175,14 +178,14 @@ class ShipParameter(models.Model):
     value = models.CharField(max_length=75)
 
     def __str__(self):
-        return self.value
+        return "%s: %s" % (self.type, self.name)
 
 
 class ShipType(models.Model):
-    type = models.CharField(max_length=25)
+    name = models.CharField(max_length=25)
 
     def __str__(self):
-        return self.type
+        return self.name
 
 
 class Ship(models.Model):

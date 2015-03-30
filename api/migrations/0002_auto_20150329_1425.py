@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='AllegianceRank',
             fields=[
-                ('id', models.AutoField(primary_key=True, auto_created=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(serialize=False, verbose_name='ID', primary_key=True, auto_created=True)),
                 ('name', models.CharField(max_length=25)),
                 ('allegiance', models.ForeignKey(to='api.Allegiance')),
             ],
@@ -25,7 +25,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Module',
             fields=[
-                ('id', models.AutoField(primary_key=True, auto_created=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(serialize=False, verbose_name='ID', primary_key=True, auto_created=True)),
                 ('name', models.CharField(max_length=50)),
             ],
             options={
@@ -35,7 +35,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='ModuleParameter',
             fields=[
-                ('id', models.AutoField(primary_key=True, auto_created=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(serialize=False, verbose_name='ID', primary_key=True, auto_created=True)),
                 ('value', models.CharField(max_length=75)),
             ],
             options={
@@ -45,7 +45,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='ModuleParameterType',
             fields=[
-                ('id', models.AutoField(primary_key=True, auto_created=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(serialize=False, verbose_name='ID', primary_key=True, auto_created=True)),
                 ('name', models.CharField(max_length=50)),
             ],
             options={
@@ -55,7 +55,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='ModuleType',
             fields=[
-                ('id', models.AutoField(primary_key=True, auto_created=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(serialize=False, verbose_name='ID', primary_key=True, auto_created=True)),
                 ('name', models.CharField(max_length=50)),
             ],
             options={
@@ -65,7 +65,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Ship',
             fields=[
-                ('id', models.AutoField(primary_key=True, auto_created=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(serialize=False, verbose_name='ID', primary_key=True, auto_created=True)),
                 ('name', models.CharField(max_length=25)),
             ],
             options={
@@ -75,7 +75,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='ShipParameter',
             fields=[
-                ('id', models.AutoField(primary_key=True, auto_created=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(serialize=False, verbose_name='ID', primary_key=True, auto_created=True)),
                 ('value', models.CharField(max_length=75)),
             ],
             options={
@@ -85,7 +85,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='ShipParameterType',
             fields=[
-                ('id', models.AutoField(primary_key=True, auto_created=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(serialize=False, verbose_name='ID', primary_key=True, auto_created=True)),
                 ('name', models.CharField(max_length=50)),
             ],
             options={
@@ -95,9 +95,9 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='ShipSlot',
             fields=[
-                ('id', models.AutoField(primary_key=True, auto_created=True, serialize=False, verbose_name='ID')),
-                ('module', models.ForeignKey(to='api.Module', null=True)),
-                ('size', models.ForeignKey(to='api.ModuleParameter', null=True)),
+                ('id', models.AutoField(serialize=False, verbose_name='ID', primary_key=True, auto_created=True)),
+                ('module', models.ForeignKey(null=True, to='api.Module')),
+                ('size', models.ForeignKey(null=True, to='api.ModuleParameter')),
                 ('type', models.ForeignKey(to='api.ModuleType')),
             ],
             options={
@@ -107,8 +107,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='ShipType',
             fields=[
-                ('id', models.AutoField(primary_key=True, auto_created=True, serialize=False, verbose_name='ID')),
-                ('type', models.CharField(max_length=25)),
+                ('id', models.AutoField(serialize=False, verbose_name='ID', primary_key=True, auto_created=True)),
+                ('name', models.CharField(max_length=25)),
             ],
             options={
             },
@@ -129,7 +129,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='ship',
             name='required_rank',
-            field=models.ForeignKey(to='api.AllegianceRank', null=True),
+            field=models.ForeignKey(null=True, to='api.AllegianceRank'),
             preserve_default=True,
         ),
         migrations.AddField(

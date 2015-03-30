@@ -3,6 +3,21 @@ from __future__ import unicode_literals
 from django.db import migrations
 
 
+def ship_types(apps, schema_editor):
+    ShipType = apps.get_model('api', 'ShipType')
+    types = ['Multipurpose', 'Combat', 'Freighter', 'Explorer', 'Passenger']
+    for ship_type in types:
+        ShipType.objects.create(name=ship_type)
+
+
+def ship_parameter_types(apps, schema_editor):
+    ShipParameterType = apps.get_model('api', 'ShipParameterType')
+    types = ['base_price', 'base_insurance', 'top_speed', 'boost_speed', 'manouverability', 'shields', 'armour',
+             'base_mass', 'base_cargo', 'base_fuel', 'base_jump_range', 'size', 'fuel_cost']
+    for ship_parameter_type in types:
+        ShipParameterType.objects.create(name=ship_parameter_type)
+
+
 def module_types(apps, schema_editor):
     ModuleType = apps.get_model('api', 'ModuleType')
     types = ['hardpoint', 'utility mount', 'bulkheads', 'reactor bay', 'thruster mounting',
@@ -174,4 +189,6 @@ class Migration(migrations.Migration):
         migrations.RunPython(module_types),
         migrations.RunPython(module_parameter_types),
         migrations.RunPython(basic_modules),
+        migrations.RunPython(ship_types),
+        migrations.RunPython(ship_parameter_types),
     ]
