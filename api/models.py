@@ -4,6 +4,9 @@ from django.db import models
 class Category(models.Model):
     name = models.CharField(max_length=50)
 
+    def __str__(self):
+        return self.name
+
 
 class Commodity(models.Model):
     category = models.ForeignKey(Category)
@@ -115,7 +118,7 @@ class Station(models.Model):
     updated_at = models.DateTimeField(auto_now_add=True, blank=True)
 
     def __str__(self):
-        return self.name
+        return "%s > %s" % (self.system, self.name)
 
 
 class Listing(models.Model):
@@ -127,6 +130,9 @@ class Listing(models.Model):
     sell_price = models.IntegerField()
     collected_at = models.DateTimeField()
     update_count = models.IntegerField()
+
+    def __str__(self):
+        return "%s > %s" % (self.station, self.commodity)
 
 
 class AllegianceRank(models.Model):
