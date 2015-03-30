@@ -16,7 +16,7 @@ class Command(BaseCommand):
     """
     Refreshdata command, import json data into database
     """
-    args = 'Which data you want to refresh. For now it is ignored'
+    args = 'Which data you want to refresh. (Commodities, Systems, Stations, Listings)'
     help = 'Refreshes database with data from eddb.io json files'
 
     def process_commodities(self):
@@ -133,10 +133,23 @@ class Command(BaseCommand):
         """
         For now we just overwrite all entries in the db.
         """
-        self.process_commodities()
-        self.process_systems()
-        self.process_stations()
-        self.process_listings()
+        if len(args) == 0:
+            self.process_commodities()
+            self.process_systems()
+            self.process_stations()
+            self.process_listings()
+            return
+
+        refresh_types = {"commodities": self.process_commodities,
+                         "systems": self.process_systems,
+                         "stations": self.process_stations,
+                         "listings": self.process_listings
+                         }
+        for arg in args:
+            try:
+                refresh_types[arg]()
+            except KeyError:
+                logger.debug("No such option.")
 
     @staticmethod
     def _fetch_json(url) -> list:
