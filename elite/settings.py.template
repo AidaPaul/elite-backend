@@ -139,5 +139,9 @@ LOGGING = {
             'handlers': ['console'],
             'level': 'DEBUG',
         },
+        'urltest': {
+            'handlers': ['console'],
+            'level': 'ERROR',
+        },
     }
 }
