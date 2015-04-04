@@ -129,28 +129,32 @@ class Command(BaseCommand):
                 new_listings.save()
         logger.debug('Finished processing listings')
 
+    def add_arguments(self, parser):
+        x = parser.parse_args()
+        self.args = x.args[1:]
+
     def handle(self, *args, **options):
         """
         It is possible to choose which entry we want to overwrite. If
         no args are given all entries will be overwritten
         """
-        if len(args) == 0:
+        if len(self.args) == 0:
             self.process_commodities()
             self.process_systems()
             self.process_stations()
             self.process_listings()
-            return
 
         refresh_types = {"commodities": self.process_commodities,
                          "systems": self.process_systems,
                          "stations": self.process_stations,
                          "listings": self.process_listings
                          }
-        for arg in args:
+        for arg in self.args:
             try:
                 refresh_types[arg]()
             except KeyError:
-                logger.debug("No such option.")
+                logger.debug("Wrong argument")
+
 
     @staticmethod
     def _fetch_json(url) -> list:
