@@ -49,9 +49,16 @@ class Command(BaseCommand):
         :return: if -q option were given it returns 2 in case of any dead links
         """
         url = "".join((base_url, viewset, item))
-        status_code = requests.get(url).status_code
+        accepted_codes = (100, 101, 102, 200, 201, 202, 203, 204, 205, 206, 207,
+                          208, 226, 300, 301, 302, 303, 304, 305, 306, 307, 308)
+        try:
+            status_code = requests.get(url).status_code
+        except requests.exceptions.ConnectionError as error:
+            logger.error(error)
+            exit(2)
         self.all_urls += 1
-        if status_code > 400 and status_code < 600:
+        logger.debug("Tested url: %s, status code: %s" % (url, status_code))
+        if status_code not in accepted_codes:
             self.broken_urls[url] = status_code
             self.broken_urls_counter += 1
             if self.options['quick']:
@@ -68,11 +75,15 @@ class Command(BaseCommand):
                             dest='quick',
                             default=False,
                             help='Passing this option will make urltest return after FIRST dead link')
-        parser.add_argument('host', nargs=1)
+        parser.add_argument('-u', '--url',
+                            nargs=1,
+                            dest='url',
+                            default=['http://localhost:8000/'],
+                            help="Url for testing. Format: http://URL/. Default: http://localhost:8000/")
 
     def handle(self, *args, **options):
         """
-        :param options: takes <host> and [options]
+        :param options: takes <url> and [options]
         """
         self.options = options
-        self.test_urls(options['host'][0])
+        self.test_urls(options['url'][0])

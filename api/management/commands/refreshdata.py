@@ -130,31 +130,36 @@ class Command(BaseCommand):
         logger.debug('Finished processing listings')
 
     def add_arguments(self, parser):
-        x = parser.parse_args()
-        self.args = x.args[1:]
+        parser.add_argument('-t', '--type',
+                            dest='type',
+                            nargs=1,
+                            default='all',
+                            help="Data type to refresh. If no type is given, "\
+                            "all data will be refreshed")
 
     def handle(self, *args, **options):
         """
         It is possible to choose which entry we want to overwrite. If
         no args are given all entries will be overwritten
         """
-        if len(self.args) == 0:
+        if options['type'] == 'all':
             self.process_commodities()
             self.process_systems()
             self.process_stations()
             self.process_listings()
+            exit(0)
 
         refresh_types = {"commodities": self.process_commodities,
                          "systems": self.process_systems,
                          "stations": self.process_stations,
                          "listings": self.process_listings
                          }
-        for arg in self.args:
-            try:
-                refresh_types[arg]()
-            except KeyError:
-                logger.debug("Wrong argument")
-
+        try:
+            type_to_refresh = options['type'][0]
+            refresh_types[type_to_refresh]()
+        except KeyError:
+            logger.error("Key error while handling refresh_types dictionary")
+            exit(2)
 
     @staticmethod
     def _fetch_json(url) -> list:
