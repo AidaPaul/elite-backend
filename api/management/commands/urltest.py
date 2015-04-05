@@ -22,6 +22,8 @@ class Command(BaseCommand):
         self.all_urls = 0
         self.broken_urls_counter = 0
         self.broken_urls = {}
+        self.accepted_codes = (100, 101, 102, 200, 201, 202, 203, 204, 205, 206, 207,
+                          208, 226, 300, 301, 302, 303, 304, 305, 306, 307, 308)
         for registry_element in router.registry:
             viewset_name = registry_element[0]
             viewset = registry_element[1]
@@ -30,8 +32,8 @@ class Command(BaseCommand):
             for item in queryset:
                 item = "/"+str(item.id)
                 self.response_handler(base_url, viewset_name, item)
-        logger.debug("All urls: %s" % self.all_urls)
-        logger.debug("Broken urls: %s" % self.broken_urls_counter)
+        logger.info("All urls: %s" % self.all_urls)
+        logger.info("Broken urls: %s" % self.broken_urls_counter)
         if len(self.broken_urls) > 0:
             for key in self.broken_urls.keys():
                 logger.error("%s %s %s" % (key, "\t", self.broken_urls[key]))
@@ -49,26 +51,39 @@ class Command(BaseCommand):
         :return: if -q option were given it returns 2 in case of any dead links
         """
         url = "".join((base_url, viewset, item))
-        accepted_codes = (100, 101, 102, 200, 201, 202, 203, 204, 205, 206, 207,
-                          208, 226, 300, 301, 302, 303, 304, 305, 306, 307, 308)
         try:
             status_code = requests.get(url).status_code
         except requests.exceptions.ConnectionError as error:
-            logger.error(error)
+            logger.critical(error)
             exit(2)
         self.all_urls += 1
-        logger.debug("Tested url: %s, status code: %s" % (url, status_code))
-        if status_code not in accepted_codes:
+        logger.debug("Testing url: %s, status code: %s" % (url, status_code))
+        if status_code not in self.accepted_codes:
+            status_code = self.recheck(url)
+            if not status_code:
+                return
             self.broken_urls[url] = status_code
             self.broken_urls_counter += 1
             if self.options['quick']:
-                logger.debug("Tested urls: %s" % self.all_urls)
-                logger.debug("Dead urls: %s" % self.broken_urls_counter)
+                logger.info("Tested urls: %s" % self.all_urls)
+                logger.info("Dead urls: %s" % self.broken_urls_counter)
                 logger.error(self.broken_urls)
                 exit(2)
 
+    def recheck(self, url):
+        """re-checks url if it's broken. If after self.options['ties'] url is still not responding properly
+        i assume that it's broken"""
+        recheck_tries = self.options['tries'][0]
+        status_code = requests.get(url).status_code
+        while recheck_tries > 0:
+            logger.info("Re-checking: %s %s" % (url, status_code))
+            status_code = requests.get(url).status_code
+            if status_code in self.accepted_codes:
+                return False
+            recheck_tries -= 1
+        return status_code
+
     def add_arguments(self, parser):
-        """adds options --quick and argument for host"""
         parser.add_argument('-q',
                             '--quick',
                             action='store_true',
@@ -80,6 +95,14 @@ class Command(BaseCommand):
                             dest='url',
                             default=['http://localhost:8000/'],
                             help="Url for testing. Format: http://URL/. Default: http://localhost:8000/")
+        parser.add_argument('-t', '--tries',
+                            nargs=1,
+                            dest='tries',
+                            default=[10],
+                            type=int,
+                            help="Provides a way to customize how many tries each link will be recheck in case of any errors. After "\
+                            "that link will be considered dead. "
+                            )
 
     def handle(self, *args, **options):
         """
