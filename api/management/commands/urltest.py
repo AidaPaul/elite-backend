@@ -28,7 +28,6 @@ class Command(BaseCommand):
             viewset_name = registry_element[0]
             viewset = registry_element[1]
             queryset = viewset.get_queryset(viewset)
-            self.response_handler(base_url, "dupeczka")
             self.response_handler(base_url, viewset_name)
             for item in queryset:
                 item = "/"+str(item.id)
