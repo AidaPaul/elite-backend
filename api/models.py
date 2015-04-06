@@ -118,7 +118,7 @@ class Station(models.Model):
     updated_at = models.DateTimeField(auto_now_add=True, blank=True)
 
     def __str__(self):
-        return "%s > %s" % (self.system, self.name)
+        return "%s" % self.name
 
 
 class Listing(models.Model):
@@ -132,7 +132,12 @@ class Listing(models.Model):
     update_count = models.IntegerField()
 
     def __str__(self):
-        return "%s > %s" % (self.station, self.commodity)
+        if self.demand > 0:
+            return "Buying %s" % self.commodity
+        elif self.supply > 0:
+            return "Selling %s" % self.commodity
+        else:
+            return "No possible movement for %s" % self.commodity
 
 
 class AllegianceRank(models.Model):

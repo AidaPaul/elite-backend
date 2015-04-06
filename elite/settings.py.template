@@ -141,7 +141,7 @@ LOGGING = {
         },
         'urltest': {
             'handlers': ['console'],
-            'level': 'ERROR',
+            'level': 'INFO',
         },
     }
 }
