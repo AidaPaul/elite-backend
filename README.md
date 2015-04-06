@@ -59,6 +59,7 @@ before 0.1 is done, you may have to wipe database entirely between commits.
 
 * `-q` - allows for quick testing urls. Command will return exit-code 2 after first encounter dead url
 * `-t` - allows to specify how many times potentially broken url will be re-checked before considered dead.
+* `-m` - allows to choose model from which urls for testing will be generated
     
 # Issues? Grievances? Complains? Feature requests? Ideas? 
 Please leave them at github or contact me by email.
