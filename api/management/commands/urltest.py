@@ -28,6 +28,7 @@ class Command(BaseCommand):
             viewset_name = registry_element[0]
             viewset = registry_element[1]
             queryset = viewset.get_queryset(viewset)
+            self.response_handler(base_url, "dupeczka")
             self.response_handler(base_url, viewset_name)
             for item in queryset:
                 item = "/"+str(item.id)
@@ -71,17 +72,18 @@ class Command(BaseCommand):
                 exit(2)
 
     def recheck(self, url):
-        """re-checks url if it's broken. If after self.options['ties'] url is still not responding properly
-        i assume that it's broken"""
-        recheck_tries = self.options['tries'][0]
-        status_code = requests.get(url).status_code
-        while recheck_tries > 0:
+        counter = 0
+        while counter < self.options['tries'][0]:
+            try:
+                status_code = requests.get(url).status_code
+            except requests.exceptions.ConnectionError as error:
+                logger.critical(error)
             logger.info("Re-checking: %s %s" % (url, status_code))
-            status_code = requests.get(url).status_code
             if status_code in self.accepted_codes:
                 return False
-            recheck_tries -= 1
+            counter += 1
         return status_code
+
 
     def add_arguments(self, parser):
         parser.add_argument('-q',
