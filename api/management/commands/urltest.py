@@ -24,8 +24,12 @@ class Command(BaseCommand):
         self.broken_urls = {}
         self.accepted_codes = (100, 101, 102, 200, 201, 202, 203, 204, 205, 206, 207,
                           208, 226, 300, 301, 302, 303, 304, 305, 306, 307, 308)
+        model_to_check = self.options['model']
         for registry_element in router.registry:
             viewset_name = registry_element[0]
+            if model_to_check != 'all':
+                if viewset_name != model_to_check:
+                    continue
             viewset = registry_element[1]
             queryset = viewset.get_queryset(viewset)
             self.response_handler(base_url, viewset_name)
@@ -83,7 +87,6 @@ class Command(BaseCommand):
             counter += 1
         return status_code
 
-
     def add_arguments(self, parser):
         parser.add_argument('-q',
                             '--quick',
@@ -104,6 +107,10 @@ class Command(BaseCommand):
                             help="Provides a way to customize how many tries each link will be recheck in case of any errors. After "\
                             "that link will be considered dead. "
                             )
+        parser.add_argument('-m', '--model',
+                            dest='model',
+                            default=['all'],
+                            help="Possible values: %s" % self.create_model_list())
 
     def handle(self, *args, **options):
         """
@@ -111,3 +118,11 @@ class Command(BaseCommand):
         """
         self.options = options
         self.test_urls(options['url'][0])
+
+    @staticmethod
+    def create_model_list():
+        """creates string with all models in router.registry"""
+        model_list = ""
+        for registry_elementy in router.registry:
+            model_list += registry_elementy[0] + ", "
+        return model_list
