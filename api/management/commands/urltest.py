@@ -2,8 +2,18 @@ from api.urls import router
 from django.core.management.base import BaseCommand
 import requests
 import logging
-
+import threading
+import queue
+from time import sleep
 logger = logging.getLogger('urltest')
+
+
+def run(master, name):
+    """runner for threads"""
+    while not master.my_queue.empty():
+        url = master.my_queue.get()
+        master.response_handler(url)
+    print("Finished thread number %s" % name)
 
 
 class Command(BaseCommand):
@@ -25,6 +35,7 @@ class Command(BaseCommand):
         self.accepted_codes = (100, 101, 102, 200, 201, 202, 203, 204, 205, 206, 207,
                           208, 226, 300, 301, 302, 303, 304, 305, 306, 307, 308)
         model_to_check = self.options['model']
+        self.my_queue = queue.Queue()
         for registry_element in router.registry:
             viewset_name = registry_element[0]
             if model_to_check != 'all':
@@ -32,10 +43,16 @@ class Command(BaseCommand):
                     continue
             viewset = registry_element[1]
             queryset = viewset.get_queryset(viewset)
-            self.response_handler(base_url, viewset_name)
+            self.my_queue.put(base_url+viewset_name + "/")
             for item in queryset:
-                item = "/"+str(item.id)
-                self.response_handler(base_url, viewset_name, item)
+                item = str(item.id)
+                url = base_url + viewset_name + "/" + item + "/"
+                self.my_queue.put(url)
+        # we are using five threads
+        for x in range(5):
+            threading.Thread(target=run, args=(self, x)).start()
+        while not self.my_queue.empty():
+            sleep(1)
         logger.info("All urls: %s" % self.all_urls)
         logger.info("Broken urls: %s" % self.broken_urls_counter)
         if len(self.broken_urls) > 0:
@@ -46,7 +63,7 @@ class Command(BaseCommand):
             print("All links seems fine.")
             exit(0)
 
-    def response_handler(self, base_url, viewset="", item=""):
+    def response_handler(self, url=""):
         """
         Check response for given url (created from params)
         :param base_url: url given as argument from console
@@ -54,7 +71,6 @@ class Command(BaseCommand):
         :param item: current item from viewset
         :return: if -q option were given it returns 2 in case of any dead links
         """
-        url = "".join((base_url, viewset, item))
         try:
             status_code = requests.get(url).status_code
         except requests.exceptions.ConnectionError as error:
@@ -109,7 +125,7 @@ class Command(BaseCommand):
                             )
         parser.add_argument('-m', '--model',
                             dest='model',
-                            default=['all'],
+                            default='all',
                             help="Possible values: %s" % self.create_model_list())
 
     def handle(self, *args, **options):
