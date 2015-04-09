@@ -48,8 +48,9 @@ exactly depends primarily on performance of your SQL server (this is very insert
 Once everything is set up and shining, then all left to do is to type `python manage.py runserver` and it's alive!
 When you steer to the bound ip and port, you will find that at /api there is a neat web-interface that allows
 for easy browsing of the API structure and data. You can also manipulate it from django admin (/admin).
-A word of note - before we will reach 0.1 release master branch is a glorified "development" branch. If you are pulling
-before 0.1 is done, you may have to wipe database entirely between commits.
+
+Master branch points at latest release point. If you want most recent version then feel free to pull from dev branch,
+which is copied over to master when milestone is reached.
 
 ## Commands
 
